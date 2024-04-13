@@ -16,12 +16,14 @@ public static class ServiceExtensions
         services.AddSingleton<MainPageViewModel>();
         services.AddTransient<MainPage>();
 
-        services.AddSingleton<DeveloperFileExplorerViewModel>();
-        services.AddTransient<DeveloperFileExplorerPage>();
+        services.AddSingleton<FileExplorerViewModel>();
+        services.AddTransient<FileExplorerPage>();
 
-        services.AddSingleton<OptimizeDevDriveDialogViewModelFactory>(sp => (cacheLocation, environmentVariable) => ActivatorUtilities.CreateInstance<OptimizeDevDriveDialogViewModel>(sp, cacheLocation, environmentVariable));
+        services.AddSingleton<OptimizeDevDriveDialogViewModelFactory>(sp => (cacheLocation, environmentVariable, exampleDevDriveLocation, existingDevDriveLetters) => ActivatorUtilities.CreateInstance<OptimizeDevDriveDialogViewModel>(sp, cacheLocation, environmentVariable, exampleDevDriveLocation, existingDevDriveLetters));
         services.AddSingleton<DevDriveInsightsViewModel>();
         services.AddTransient<DevDriveInsightsPage>();
+
+        services.AddTransient<QuietBackgroundProcessesViewModel>();
 
         return services;
     }
