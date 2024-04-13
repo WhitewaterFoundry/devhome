@@ -21,6 +21,7 @@ public sealed partial class LandingPage : ToolPage
     {
         ViewModel = Application.Current.GetService<LandingPageViewModel>();
         InitializeComponent();
+        ViewModel.Initialize(NotificationQueue);
 
 #if DEBUG
         Loaded += AddDebugButtons;
@@ -53,11 +54,6 @@ public sealed partial class LandingPage : ToolPage
 
     private void OnLoaded(object sender, RoutedEventArgs e)
     {
-        if (ViewModel.HasPageLoadedForTheFirstTime)
-        {
-            return;
-        }
-
         _ = ViewModel.LoadModelAsync(false);
     }
 }
