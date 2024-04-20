@@ -181,7 +181,8 @@ public class WslRegisteredDistro : IComputeSystem
 
     public ComputeSystemOperations SupportedOperations =>
         ComputeSystemOperations.Terminate |
-        ComputeSystemOperations.Delete;
+        ComputeSystemOperations.Delete |
+        ComputeSystemOperations.ModifyProperties;
 
     public bool? Running { get; set; }
 

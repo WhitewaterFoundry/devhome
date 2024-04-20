@@ -2,7 +2,7 @@
 	<Import Project="$(SolutionDir)ToolingVersions.props" />
 	<PropertyGroup>
     <OutputType>WinExe</OutputType>
-		<TargetFramework>net8.0-windows10.0.22000.0</TargetFramework>
+		<TargetFramework>net8.0-windows10.0.22621.0</TargetFramework>
 		<TargetPlatformMinVersion>10.0.19041.0</TargetPlatformMinVersion>  
 		<TargetPlatformVersion>10.0.22621.0</TargetPlatformVersion>  
 		<ImplicitUsings>enable</ImplicitUsings>
@@ -21,7 +21,7 @@
  
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.3" />
-		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.5.240227000" />
+		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.5.240311000" />
 		<PackageReference Include="Serilog" Version="3.1.1" />
 		<PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0" />
 		<PackageReference Include="Serilog.Settings.Configuration" Version="8.0.0" />
