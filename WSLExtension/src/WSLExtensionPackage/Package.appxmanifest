@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" 
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" 
+  xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3" 
+  xmlns:uap5="http://schemas.microsoft.com/appx/manifest/uap/windows10/5" 
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities" 
+  xmlns:genTemplate="http://schemas.microsoft.com/appx/developer/templatestudio" 
+  xmlns:com="http://schemas.microsoft.com/appx/manifest/com/windows10" 
+  xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10" 
+  xmlns:desktop6="http://schemas.microsoft.com/appx/manifest/desktop/windows10/6" 
+  IgnorableNamespaces="uap uap3 uap5 rescap genTemplate desktop6">
+
+  <Identity
+    Name="104a034f-c4d3-4ab3-9365-bbb0ab8132f6"
+    Publisher="CN=&quot;Whitewater Foundry, Ltd. Co.&quot;, O=&quot;Whitewater Foundry, Ltd. Co.&quot;, S=Florida, C=US"
+    Version="1.0.0.0" />
+
+  <Properties>
+    <DisplayName>WSLExtensionPackage</DisplayName>
+    <PublisherDisplayName>hcram</PublisherDisplayName>
+    <Logo>Images\StoreLogo.png</Logo>
+  </Properties>
+
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.19041.0" MaxVersionTested="10.0.22000.0" />
+  </Dependencies>
+
+  <Resources>
+    <Resource Language="x-generate"/>
+  </Resources>
+
+  <Applications>
+    <Application Id="App"
+      Executable="$targetnametoken$.exe"
+      EntryPoint="$targetentrypoint$">
+      <uap:VisualElements
+        DisplayName="WSLExtensionPackage"
+        Description="WSLExtensionPackage"
+        BackgroundColor="transparent"
+        Square150x150Logo="Images\Square150x150Logo.png"
+        Square44x44Logo="Images\Square44x44Logo.png">
+        <uap:DefaultTile Wide310x150Logo="Images\Wide310x150Logo.png" />
+        <uap:SplashScreen Image="Images\SplashScreen.png" />
+      </uap:VisualElements>
+      <Extensions>
+        <com:Extension Category="windows.comServer">
+          <com:ComServer>
+            <com:ExeServer Executable="WSLExtensionServer.exe" Arguments="-RegisterProcessAsComServer" DisplayName="WSLExtensionServer">
+              <com:Class Id="23C9CD5B-BC49-46F6-8C8E-9DE3214C5927" DisplayName="WSLExtensionServer" />
+            </com:ExeServer>
+          </com:ComServer>
+        </com:Extension>
+        <uap3:Extension Category="windows.appExtension">
+          <uap3:AppExtension Name="com.microsoft.devhome" Id="PG-SP-ID3" PublicFolder="Public" DisplayName="WSL Extension" Description="WSL Extension">
+            <uap3:Properties>
+              <DevHomeProvider>
+                <Activation>
+                  <CreateInstance ClassId="23C9CD5B-BC49-46F6-8C8E-9DE3214C5927" />
+                </Activation>
+                <SupportedInterfaces>
+                  <ComputeSystem />
+                </SupportedInterfaces>
+              </DevHomeProvider>
+            </uap3:Properties>
+          </uap3:AppExtension>
+        </uap3:Extension>
+		  
+		  </Extensions>
+    </Application>
+  </Applications>
+
+  <Capabilities>
+    <Capability Name="internetClient" />
+    <rescap:Capability Name="runFullTrust" />
+  </Capabilities>
+</Package>
