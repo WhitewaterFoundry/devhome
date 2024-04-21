@@ -36,6 +36,8 @@
   <ItemGroup>
     <None Remove="DistroDefinitions\Definitions\distros.yaml" />
     <None Remove="DistroDefinitions\Definitions\distro_kinds.yaml" />
+    <None Remove="Templates\ReviewFormForWslInstallation.json" />
+    <None Remove="Templates\WslInstallationForm.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -64,6 +66,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="DistroDefinitions\Definitions\distro_kinds.yaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\ReviewFormForWslInstallation.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\WslInstallationForm.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

@@ -24,4 +24,6 @@ public interface IProcessCaller
     string CallElevatedProcess(string command, string arguments, Encoding outputEncoding, string? workingDirectory = null);
 
     string RunCmdInDistroDetached(string distroRegistration, string command, bool root = false, string? stdIn = null);
+
+    Task<int> CallInteractiveProcess(string command, string arguments);
 }

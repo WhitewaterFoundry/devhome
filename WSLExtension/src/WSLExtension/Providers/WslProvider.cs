@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Windows.DevHome.SDK;
 using Serilog;
@@ -32,15 +33,45 @@ public class WslProvider : IComputeSystemProvider
 
     public string OperationErrorString => "ErrorPerformingOperation";
 
-    public ComputeSystemAdaptiveCardResult CreateAdaptiveCardSessionForDeveloperId(IDeveloperId developerId, ComputeSystemAdaptiveCardKind sessionKind) =>
-        throw new NotImplementedException();
+    public ComputeSystemAdaptiveCardResult CreateAdaptiveCardSessionForDeveloperId(IDeveloperId developerId, ComputeSystemAdaptiveCardKind sessionKind)
+    {
+        var task = _wslManager.GetOnlineAvailableDistros();
+        task.Wait();
+
+        var distroList = task.Result;
+
+        return new ComputeSystemAdaptiveCardResult(new WslAvailableDistrosAdaptiveCardSession(distroList, _stringResource));
+    }
 
     public ComputeSystemAdaptiveCardResult CreateAdaptiveCardSessionForComputeSystem(IComputeSystem computeSystem, ComputeSystemAdaptiveCardKind sessionKind) =>
         throw new NotImplementedException();
 
-    public ICreateComputeSystemOperation
-        CreateCreateComputeSystemOperation(IDeveloperId developerId, string inputJson) =>
-        throw new NotImplementedException();
+    public ICreateComputeSystemOperation? CreateCreateComputeSystemOperation(IDeveloperId? developerId, string inputJson)
+    {
+        try
+        {
+            var deserializedObject = JsonSerializer.Deserialize(inputJson, typeof(WslInstallationUserInput));
+            var wslInstallationUserInput = deserializedObject as WslInstallationUserInput ?? throw new InvalidOperationException($"Json deserialization failed for input Json: {inputJson}");
+
+            var task = _wslManager.GetOnlineAvailableDistros();
+            task.Wait();
+
+            var distroList = task.Result;
+
+            return new WslInstallAndRegisterDistroOperation(
+                distroList[wslInstallationUserInput.SelectedDistroListIndex],
+                _stringResource,
+                _wslManager);
+        }
+        catch (Exception ex)
+        {
+            _log.Error(ex, $"Failed to install WSL distro on: {DateTime.Now}");
+
+            // Dev Home will handle null values as failed operations. We can't throw because this is an out of proc
+            // COM call, so we'll lose the error information. We'll log the error and return null.
+            return null;
+        }
+    }
 
     public string DisplayName => Constants.WslProviderDisplayName;
 
@@ -48,7 +79,7 @@ public class WslProvider : IComputeSystemProvider
 
     public string Id => Constants.WslProviderId;
 
-    public ComputeSystemProviderOperations SupportedOperations => ComputeSystemProviderOperations.None;
+    public ComputeSystemProviderOperations SupportedOperations => ComputeSystemProviderOperations.CreateComputeSystem;
 
     public IAsyncOperation<ComputeSystemsResult> GetComputeSystemsAsync(IDeveloperId developerId)
     {

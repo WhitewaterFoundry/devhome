@@ -106,6 +106,19 @@
               <DevHomeProvider>
                 <Activation>
                   <CreateInstance ClassId="F8B26528-976A-488C-9B40-7198FB425C9E" />
+                </Activation>
+                <SupportedInterfaces>
+                  <ComputeSystem />
+                </SupportedInterfaces>
+              </DevHomeProvider>
+            </uap3:Properties>
+          </uap3:AppExtension>
+        </uap3:Extension>
+        <uap3:Extension Category="windows.appExtension">
+          <uap3:AppExtension Name="com.microsoft.devhome" Id="PG-SP-ID3" PublicFolder="Public" DisplayName="WSL Extension" Description="WSL Extension">
+            <uap3:Properties>
+              <DevHomeProvider>
+                <Activation>
                   <CreateInstance ClassId="23C9CD5B-BC49-46F6-8C8E-9DE3214C5927" />
                 </Activation>
                 <SupportedInterfaces>

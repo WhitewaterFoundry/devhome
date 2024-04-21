@@ -259,6 +259,55 @@ public class ProcessCaller : IProcessCaller
         }
     }
 
+    public async Task<int> CallInteractiveProcess(string command, string arguments)
+    {
+        Process process;
+        if (command != Constants.WtExecutable)
+        {
+            process = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = command,
+                    Arguments = arguments,
+                    UseShellExecute = false,
+                    RedirectStandardOutput = false,
+                    RedirectStandardError = false,
+                    CreateNoWindow = false,
+                    WindowStyle = ProcessWindowStyle.Normal,
+                },
+            };
+        }
+        else
+        {
+            process = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = "cmd",
+                    Arguments = "/c start " + command + " " + arguments,
+                    UseShellExecute = false,
+                    RedirectStandardOutput = false,
+                    RedirectStandardError = false,
+                    CreateNoWindow = true,
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                },
+            };
+        }
+
+        try
+        {
+            StartProcess(process);
+
+            await process.WaitForExitAsync(CancellationToken.None);
+            return process.ExitCode;
+        }
+        finally
+        {
+            process.Dispose();
+        }
+    }
+
     [DllImport("kernel32.dll", SetLastError = true)]
     private static extern bool Wow64DisableWow64FsRedirection(ref IntPtr ptr);
 

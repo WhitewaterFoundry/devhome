@@ -2,8 +2,12 @@
 // Licensed under the MIT License.
 
 using System.CodeDom.Compiler;
+using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.Storage;
+using Windows.Storage.Streams;
 using WSLExtension.Common;
 using WSLExtension.DistroDefinitions;
+using WSLExtension.Helpers;
 using WSLExtension.Helpers.Distros;
 using WSLExtension.Models;
 
@@ -16,6 +20,7 @@ public class WslManager : IWslManager
     private readonly IStringResource _stringResource;
 
     private readonly List<IDistro> _distroDefinitions;
+    private readonly bool _isWslEnabled;
 
     public WslManager(IProcessCaller processCaller, IRegistryAccess registryAccess, IStringResource stringResource)
     {
@@ -25,21 +30,27 @@ public class WslManager : IWslManager
         _distroDefinitions = [];
 
         ReadDistroDefinitions();
+        _isWslEnabled = WslInfo.IsWslEnabled(_processCaller);
     }
+
+    // ReSharper disable once ConvertToAutoProperty
+    public bool IsWslEnabled => _isWslEnabled;
+
+    public List<IDistro> Definitions => new(_distroDefinitions);
 
     private void ReadDistroDefinitions()
     {
         Task.Run(async () =>
         {
             var definitionsRead = await DistroDefinitionsManager.ReadDistroDefinitions();
-            _distroDefinitions.AddRange(definitionsRead);
+            Definitions.AddRange(definitionsRead);
         });
     }
 
     public IEnumerable<WslRegisteredDistro> GetAllRegisteredDistros()
     {
         var distros = DistroDefinitionsManager.Merge(
-            _distroDefinitions,
+            Definitions,
             GetInstalledDistros.Execute(_processCaller));
 
         return distros.Select(d => new WslRegisteredDistro(_stringResource, this)
@@ -52,6 +63,38 @@ public class WslManager : IWslManager
             IsWsl2 = d.Version2,
             Logo = d.Logo,
         });
+    }
+
+    public async Task<List<Distro>> GetOnlineAvailableDistros()
+    {
+        var distros = await GetAvailableDistros.Execute(_processCaller);
+        var registeredDistros = GetInstalledDistros.Execute(_processCaller);
+
+        var task = distros
+            .Where(d => registeredDistros.All(r => r.Registration != d.Registration))
+            .Select(async d => new Distro
+            {
+                Registration = d.Registration,
+                Name = d.Name,
+                Logo = await ReadAndEncodeImage(d.Logo),
+            });
+
+        var distroArray = await Task.WhenAll(task);
+
+        return distroArray.ToList();
+    }
+
+    public static async Task<string?> ReadAndEncodeImage(string? logo)
+    {
+        var uri = new Uri($"ms-appx:///WSLExtension/DistroDefinitions/Assets/{logo}");
+        var storageFile = await StorageFile.GetFileFromApplicationUriAsync(uri);
+        var randomAccessStream = await storageFile.OpenReadAsync();
+
+        // Convert the stream to a byte array
+        var bytes = new byte[randomAccessStream.Size];
+        await randomAccessStream.ReadAsync(bytes.AsBuffer(), (uint)randomAccessStream.Size, InputStreamOptions.None);
+
+        return Convert.ToBase64String(bytes);
     }
 
     public void Run(string registration)
@@ -67,5 +110,15 @@ public class WslManager : IWslManager
     public void Unregister(string registration)
     {
         Management.Unregister(registration, _processCaller);
+    }
+
+    public async Task<int> InstallWsl(string registration)
+    {
+        return await Management.InstallWsl(_processCaller, registration);
+    }
+
+    public void InstallWslDistribution(string registration)
+    {
+        Management.InstallDistro(_processCaller, registration);
     }
 }

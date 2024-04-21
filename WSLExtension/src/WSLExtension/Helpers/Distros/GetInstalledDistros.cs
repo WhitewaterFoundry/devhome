@@ -11,7 +11,7 @@ public class GetInstalledDistros
     public static List<IDistro> Execute(IProcessCaller processCaller)
     {
         var distroListDetail = processCaller.CallProcess("wsl", "--list --verbose", out var exitCode);
-        if (AreDistributionsInstalled(exitCode, distroListDetail))
+        if (NoDistributionInstalled(exitCode, distroListDetail))
         {
             return new List<IDistro>();
         }
@@ -19,7 +19,7 @@ public class GetInstalledDistros
         return WslCommandUtils.ParseDistroListDetail(distroListDetail);
     }
 
-    private static bool AreDistributionsInstalled(int exitCode, string commandOutput)
+    private static bool NoDistributionInstalled(int exitCode, string commandOutput)
     {
         return !commandOutput.Contains("NAME")
                || commandOutput.Contains("Wsl/WSL_E_DEFAULT_DISTRO_NOT_FOUND")

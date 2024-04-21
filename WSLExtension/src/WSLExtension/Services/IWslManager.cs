@@ -21,4 +21,14 @@ public interface IWslManager
     void Terminate(string registration);
 
     void Unregister(string registration);
+
+    Task<List<Distro>> GetOnlineAvailableDistros();
+
+    Task<int> InstallWsl(string registration);
+
+    void InstallWslDistribution(string registration);
+
+    bool IsWslEnabled { get; }
+
+    List<IDistro> Definitions { get; }
 }

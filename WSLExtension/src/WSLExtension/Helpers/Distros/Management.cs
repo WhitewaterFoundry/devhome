@@ -25,4 +25,25 @@ public class Management
             throw new WslManagerException($"Failed to unregister the distro {registration}");
         }
     }
+
+    public static async Task<int> InstallWsl(IProcessCaller processCaller, string distroRegistration)
+    {
+        var exitCode = await processCaller.CallInteractiveProcess(
+            "wsl",
+            $"--install --distribution {distroRegistration}".Trim());
+
+        if (exitCode == 0)
+        {
+            processCaller.CallProcess("shutdown.exe", "/r", Encoding.Unicode, out exitCode);
+        }
+
+        return exitCode;
+    }
+
+    public static void InstallDistro(IProcessCaller processCaller, string distroRegistration)
+    {
+        processCaller.CallDetachedProcess(
+            "wsl",
+            $"--install --distribution {distroRegistration}".Trim());
+    }
 }
