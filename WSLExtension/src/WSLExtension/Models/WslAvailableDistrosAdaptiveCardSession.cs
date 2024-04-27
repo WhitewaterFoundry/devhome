@@ -7,6 +7,7 @@ using System.Text.Json.Nodes;
 using Microsoft.Windows.DevHome.SDK;
 using Serilog;
 using Windows.Foundation;
+using Windows.Storage;
 using WSLExtension.Common;
 using WSLExtension.Exceptions;
 using WSLExtension.Helpers;
@@ -26,15 +27,8 @@ public class WslAvailableDistrosAdaptiveCardSession : IExtensionAdaptiveCardSess
     private readonly List<Distro> _distroList;
     private readonly ILogger _log = Log.ForContext("SourceContext", nameof(WslRegisteredDistro));
 
-    private readonly string _pathToReviewFormTemplate = Path.Combine(
-        AppContext.BaseDirectory,
-        @"WSLExtension\Templates\",
-        "ReviewFormForWslInstallation.json");
-
-    private readonly string _pathToWslInstallationFormTemplate = Path.Combine(
-        AppContext.BaseDirectory,
-        @"WSLExtension\Templates\",
-        "WslInstallationForm.json");
+    private const string PathToReviewFormTemplate = "ReviewFormForWslInstallation.json";
+    private const string PathToWslInstallationFormTemplate = "WslInstallationForm.json";
 
     private readonly IStringResource _stringResource;
     private volatile IExtensionAdaptiveCard? _availableDistrosAdaptiveCard;
@@ -254,11 +248,18 @@ public class WslAvailableDistrosAdaptiveCardSession : IExtensionAdaptiveCardSess
     {
         var pathToTemplate = state switch
         {
-            SessionState.WslInstallationForm => _pathToWslInstallationFormTemplate,
-            SessionState.ReviewForm => _pathToReviewFormTemplate,
-            _ => _pathToWslInstallationFormTemplate,
+            SessionState.WslInstallationForm => PathToWslInstallationFormTemplate,
+            SessionState.ReviewForm => PathToReviewFormTemplate,
+            _ => PathToWslInstallationFormTemplate,
         };
 
-        return File.ReadAllText(pathToTemplate, Encoding.Default);
+        var task = Task.Run(async () =>
+        {
+            var storageFile = await StorageFile.GetFileFromApplicationUriAsync(new Uri($"ms-appx:///WSLExtension/Templates/{pathToTemplate}"));
+            return await FileIO.ReadTextAsync(storageFile);
+        });
+
+        task.Wait();
+        return task.Result;
     }
 }

@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 using System.CodeDom.Compiler;
+using System.Collections.Immutable;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Storage;
 using Windows.Storage.Streams;
@@ -18,9 +19,9 @@ public class WslManager : IWslManager
     private readonly IProcessCaller _processCaller;
     private readonly IRegistryAccess _registryAccess;
     private readonly IStringResource _stringResource;
-
-    private readonly List<IDistro> _distroDefinitions;
     private readonly bool _isWslEnabled;
+
+    private volatile ImmutableList<Distro> _distroDefinitions;
 
     public WslManager(IProcessCaller processCaller, IRegistryAccess registryAccess, IStringResource stringResource)
     {
@@ -36,21 +37,21 @@ public class WslManager : IWslManager
     // ReSharper disable once ConvertToAutoProperty
     public bool IsWslEnabled => _isWslEnabled;
 
-    public List<IDistro> Definitions => new(_distroDefinitions);
+    public List<Distro> Definitions => _distroDefinitions.ToList();
 
     private void ReadDistroDefinitions()
     {
         Task.Run(async () =>
         {
             var definitionsRead = await DistroDefinitionsManager.ReadDistroDefinitions();
-            Definitions.AddRange(definitionsRead);
+            _distroDefinitions = ImmutableList.CreateRange(definitionsRead);
         });
     }
 
     public IEnumerable<WslRegisteredDistro> GetAllRegisteredDistros()
     {
         var distros = DistroDefinitionsManager.Merge(
-            Definitions,
+            _distroDefinitions.ToList(),
             GetInstalledDistros.Execute(_processCaller));
 
         return distros.Select(d => new WslRegisteredDistro(_stringResource, this)

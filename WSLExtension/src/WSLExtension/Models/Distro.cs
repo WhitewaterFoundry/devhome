@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace WSLExtension.Models;
 
-public class Distro : IDistro, IComparable<IDistro>, ICloneable
+public class Distro : IComparable<Distro>, ICloneable
 {
     public Distro()
     {
@@ -18,11 +18,11 @@ public class Distro : IDistro, IComparable<IDistro>, ICloneable
         Registration = registration;
     }
 
-    public static IComparer<IDistro> RegistrationComparer { get; } = new RegistrationRelationalComparer();
+    public static IComparer<Distro> RegistrationComparer { get; } = new RegistrationRelationalComparer();
 
-    public static IComparer<IDistro> NameRegistrationComparer { get; } = new NameRegistrationRelationalComparer();
+    public static IComparer<Distro> NameRegistrationComparer { get; } = new NameRegistrationRelationalComparer();
 
-    public static IComparer<IDistro> DistroKindRegistrationNameComparer { get; } =
+    public static IComparer<Distro> DistroKindRegistrationNameComparer { get; } =
         new DistroKindRegistrationNameRelationalComparer();
 
     public object Clone()
@@ -37,7 +37,7 @@ public class Distro : IDistro, IComparable<IDistro>, ICloneable
         };
     }
 
-    public int CompareTo(IDistro? other)
+    public int CompareTo(Distro? other)
     {
         if (ReferenceEquals(this, other))
         {
@@ -66,7 +66,7 @@ public class Distro : IDistro, IComparable<IDistro>, ICloneable
 
     public bool? HasArm64Version { get; set; }
 
-    protected bool Equals(IDistro? other)
+    protected bool Equals(Distro? other)
     {
         return other != null && Registration == other.Registration;
     }
@@ -83,7 +83,7 @@ public class Distro : IDistro, IComparable<IDistro>, ICloneable
             return true;
         }
 
-        if (obj is IDistro distro)
+        if (obj is Distro distro)
         {
             return Equals(distro);
         }
@@ -96,9 +96,9 @@ public class Distro : IDistro, IComparable<IDistro>, ICloneable
         return Registration.GetHashCode();
     }
 
-    private sealed class RegistrationRelationalComparer : IComparer<IDistro>
+    private sealed class RegistrationRelationalComparer : IComparer<Distro>
     {
-        public int Compare(IDistro? x, IDistro? y)
+        public int Compare(Distro? x, Distro? y)
         {
             if (ReferenceEquals(x, y))
             {
@@ -119,9 +119,9 @@ public class Distro : IDistro, IComparable<IDistro>, ICloneable
         }
     }
 
-    private sealed class NameRegistrationRelationalComparer : IComparer<IDistro>
+    private sealed class NameRegistrationRelationalComparer : IComparer<Distro>
     {
-        public int Compare(IDistro? x, IDistro? y)
+        public int Compare(Distro? x, Distro? y)
         {
             if (ReferenceEquals(x, y))
             {
@@ -148,9 +148,9 @@ public class Distro : IDistro, IComparable<IDistro>, ICloneable
         }
     }
 
-    private sealed class DistroKindRegistrationNameRelationalComparer : IComparer<IDistro>
+    private sealed class DistroKindRegistrationNameRelationalComparer : IComparer<Distro>
     {
-        public int Compare(IDistro? x, IDistro? y)
+        public int Compare(Distro? x, Distro? y)
         {
             if (ReferenceEquals(x, y))
             {
@@ -187,7 +187,7 @@ public class Distro : IDistro, IComparable<IDistro>, ICloneable
         return left.Equals(right);
     }
 
-    public static bool operator !=(Distro left, Distro right)
+    public static bool operator !=(Distro? left, Distro? right)
     {
         return !(left == right);
     }

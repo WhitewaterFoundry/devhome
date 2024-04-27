@@ -47,7 +47,7 @@ public class DistroDefinitionsManager
         return serializer;
     }
 
-    public static List<IDistro> Merge(List<IDistro> definitions, List<IDistro> registered)
+    public static List<Distro> Merge(List<Distro> definitions, List<Distro> registered)
     {
         return registered.Select(r =>
         {

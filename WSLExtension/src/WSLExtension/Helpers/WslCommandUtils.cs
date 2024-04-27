@@ -18,9 +18,9 @@ public class WslCommandUtils
 
     private const int WslListColumnVersion = 2;
 
-    public static List<IDistro> ParseDistroListDetail(string distroListDetail)
+    public static List<Distro> ParseDistroListDetail(string distroListDetail)
     {
-        var distros = new List<IDistro>();
+        var distros = new List<Distro>();
         using (var reader = new StringReader(distroListDetail))
         {
             reader.ReadLine(); // Skip the first line
@@ -35,7 +35,7 @@ public class WslCommandUtils
 
                 var parts = line.Substring(2).Split([" "], StringSplitOptions.RemoveEmptyEntries);
 
-                IDistro distro = new Distro(parts[WslListColumnName])
+                var distro = new Distro(parts[WslListColumnName])
                 {
                     DefaultDistro = distroDefault,
                     Running = parts[WslListColumnState] == WslListStateRunning,

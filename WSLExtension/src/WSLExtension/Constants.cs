@@ -22,11 +22,11 @@ public sealed class Constants
 // https://learn.microsoft.com/en-us/windows/uwp/app-resources/makepri-exe-command-options. (use MakePri.exe in a VS Developer Command Prompt or
 // Powershell window)
 #if CANARY_BUILD
-    public const string ExtensionIcon = "ms-resource://Microsoft.Windows.DevHome.Canary/Files/WSLExtension/Assets/wsl-provider-icon.png";
+    public const string ExtensionIcon = "ms-resource://Microsoft.Windows.DevHomeWSLExtension.Canary/Files/WSLExtension/Assets/wsl-provider-icon.png";
 #elif STABLE_BUILD
-    public const string ExtensionIcon = "ms-resource://Microsoft.Windows.DevHome/Files/WSLExtension/Assets/wsl-provider-icon.png";
+    public const string ExtensionIcon = "ms-resource://Microsoft.Windows.DevHomeWSLExtension/Files/WSLExtension/Assets/wsl-provider-icon.png";
 #else
-    public const string ExtensionIcon = "ms-resource://Microsoft.Windows.DevHome.Dev/Files/WSLExtension/Assets/wsl-provider-icon.png";
+    public const string ExtensionIcon = "ms-resource://Microsoft.Windows.DevHomeWSLExtension.Dev/Files/WSLExtension/Assets/wsl-provider-icon.png";
 #endif
 
     // Common strings used for WSL extension

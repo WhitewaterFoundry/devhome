@@ -13,13 +13,13 @@
         IgnorableNamespaces="uap uap3 uap5 rescap genTemplate desktop6">
 
   <Identity
-          Name="104a034f-c4d3-4ab3-9365-bbb0ab8132f6"
+          Name="Microsoft.Windows.DevHomeWSLExtension.Dev"
           Publisher="CN=&quot;Whitewater Foundry, Ltd. Co.&quot;, O=&quot;Whitewater Foundry, Ltd. Co.&quot;, S=Florida, C=US"
           Version="1.0.0.0" />
 
   <Properties>
-    <DisplayName>WSLExtensionPackage</DisplayName>
-    <PublisherDisplayName>hcram</PublisherDisplayName>
+    <DisplayName>Dev Home WSL Extension (Preview)</DisplayName>
+    <PublisherDisplayName>Whitewater Foundry, Ltd. Co.</PublisherDisplayName>
     <Logo>Images\StoreLogo.png</Logo>
   </Properties>
 
@@ -33,7 +33,7 @@
 
   <Applications>
     <Application Id="App"
-                 Executable="$targetnametoken$.exe"
+                 Executable="WSLExtensionServer\WSLExtensionServer.exe"
                  EntryPoint="$targetentrypoint$">
       <uap:VisualElements
               DisplayName="WSLExtensionPackage"
@@ -47,7 +47,7 @@
       <Extensions>
         <com:Extension Category="windows.comServer">
           <com:ComServer>
-            <com:ExeServer Executable="WSLExtensionServer.exe" Arguments="-RegisterProcessAsComServer" DisplayName="WSLExtensionServer">
+            <com:ExeServer Executable="WSLExtensionServer\WSLExtensionServer.exe" Arguments="-RegisterProcessAsComServer" DisplayName="WSLExtensionServer">
               <com:Class Id="23C9CD5B-BC49-46F6-8C8E-9DE3214C5927" DisplayName="WSLExtensionServer" />
             </com:ExeServer>
           </com:ComServer>
@@ -66,7 +66,6 @@
             </uap3:Properties>
           </uap3:AppExtension>
         </uap3:Extension>
-
       </Extensions>
     </Application>
   </Applications>

@@ -14,7 +14,7 @@ public interface IRegistryAccess
 
     void SetDistroDefaultUser(string distroRegistration, string defaultUId);
 
-    IList<IDistro> GetInstalledDistros();
+    IList<Distro> GetInstalledDistros();
 
     int? GetDefaultWslVersion();
 

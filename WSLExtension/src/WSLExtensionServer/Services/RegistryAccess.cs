@@ -128,9 +128,9 @@ public class RegistryAccess : IRegistryAccess
         }
     }
 
-    public IList<IDistro> GetInstalledDistros()
+    public IList<Distro> GetInstalledDistros()
     {
-        var distros = new List<IDistro>();
+        var distros = new List<Distro>();
 
         var baseKey = OpenBaseKey(RegistryHive.CurrentUser, RegistryView.Registry64);
         try

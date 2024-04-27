@@ -80,6 +80,7 @@
             </com:ExeServer>
           </com:ComServer>
         </com:Extension>
+<!--
         <com:Extension Category="windows.comServer">
           <com:ComServer>
             <com:ExeServer Executable="WSLExtensionServer.exe" Arguments="-RegisterProcessAsComServer" DisplayName="WSLExtensionServer">
@@ -87,6 +88,7 @@
             </com:ExeServer>
           </com:ComServer>
         </com:Extension>
+-->
         <uap3:Extension Category="windows.appExtension">
           <uap3:AppExtension Name="com.microsoft.devhome" Id="PG-SP-ID1" PublicFolder="Public" DisplayName="ms-resource:AppDisplayNameCoreExt" Description="ms-resource:AppDescriptionCoreExt">
             <uap3:Properties>
@@ -114,6 +116,7 @@
             </uap3:Properties>
           </uap3:AppExtension>
         </uap3:Extension>
+<!--
         <uap3:Extension Category="windows.appExtension">
           <uap3:AppExtension Name="com.microsoft.devhome" Id="PG-SP-ID3" PublicFolder="Public" DisplayName="WSL Extension" Description="WSL Extension">
             <uap3:Properties>
@@ -128,6 +131,7 @@
             </uap3:Properties>
           </uap3:AppExtension>
         </uap3:Extension>
+-->
         <uap3:Extension Category="windows.appExtension">
           <uap3:AppExtension Name="com.microsoft.windows.widgets" DisplayName="ms-resource:WidgetProviderDisplayNameDev" Id="CoreWidgetProvider" PublicFolder="Public">
             <uap3:Properties>
