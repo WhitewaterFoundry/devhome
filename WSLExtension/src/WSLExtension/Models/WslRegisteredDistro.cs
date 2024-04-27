@@ -159,7 +159,7 @@ public class WslRegisteredDistro : IComputeSystem
     {
         return Task.Run(() =>
         {
-            _wslManager.Run(Id);
+            _wslManager.Run(Id, WtProfileGuid);
             Running = true;
             StateChanged?.Invoke(this, ComputeSystemState.Running);
             return new ComputeSystemOperationResult();
@@ -191,6 +191,8 @@ public class WslRegisteredDistro : IComputeSystem
     public bool? IsWsl2 { get; set; }
 
     public string? Logo { get; set; }
+
+    public string? WtProfileGuid { get; set; }
 
     public event TypedEventHandler<IComputeSystem, ComputeSystemState>? StateChanged = (s, e) => { };
 }

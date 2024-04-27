@@ -1,19 +1,10 @@
 {
   "profiles": {
     "DevHome (Package)": {
-      "commandName": "MsixPackage",
-      "remoteDebugEnabled": false,
-      "authenticationMode": "None",
-      "remoteDebugMachine": "WINDOWS11VM"
+      "commandName": "MsixPackage"
     },
     "DevHome (Unpackaged)": {
       "commandName": "Project"
-    },
-    "Profile 1": {
-      "commandName": "MsixPackage",
-      "remoteDebugEnabled": true,
-      "authenticationMode": "None",
-      "remoteDebugMachine": "WINDOWS11VM"
     }
   }
 }

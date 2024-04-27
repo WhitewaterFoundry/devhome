@@ -66,6 +66,8 @@ public class Distro : IComparable<Distro>, ICloneable
 
     public bool? HasArm64Version { get; set; }
 
+    public string? WtProfileGuid { get; set; }
+
     protected bool Equals(Distro? other)
     {
         return other != null && Registration == other.Registration;

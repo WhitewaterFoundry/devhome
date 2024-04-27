@@ -20,8 +20,7 @@ public class WslManager : IWslManager
     private readonly IRegistryAccess _registryAccess;
     private readonly IStringResource _stringResource;
     private readonly bool _isWslEnabled;
-
-    private volatile ImmutableList<Distro> _distroDefinitions;
+    private readonly ImmutableList<Distro> _distroDefinitions;
 
     public WslManager(IProcessCaller processCaller, IRegistryAccess registryAccess, IStringResource stringResource)
     {
@@ -29,24 +28,18 @@ public class WslManager : IWslManager
         _registryAccess = registryAccess;
         _stringResource = stringResource;
         _distroDefinitions = [];
-
-        ReadDistroDefinitions();
         _isWslEnabled = WslInfo.IsWslEnabled(_processCaller);
+
+        var task = Task.Run(DistroDefinitionsManager.ReadDistroDefinitions);
+        task.Wait();
+
+        _distroDefinitions = ImmutableList.CreateRange(task.Result);
     }
 
     // ReSharper disable once ConvertToAutoProperty
     public bool IsWslEnabled => _isWslEnabled;
 
     public List<Distro> Definitions => _distroDefinitions.ToList();
-
-    private void ReadDistroDefinitions()
-    {
-        Task.Run(async () =>
-        {
-            var definitionsRead = await DistroDefinitionsManager.ReadDistroDefinitions();
-            _distroDefinitions = ImmutableList.CreateRange(definitionsRead);
-        });
-    }
 
     public IEnumerable<WslRegisteredDistro> GetAllRegisteredDistros()
     {
@@ -63,6 +56,7 @@ public class WslManager : IWslManager
             IsDefault = d.DefaultDistro,
             IsWsl2 = d.Version2,
             Logo = d.Logo,
+            WtProfileGuid = d.WtProfileGuid,
         });
     }
 
@@ -98,9 +92,9 @@ public class WslManager : IWslManager
         return Convert.ToBase64String(bytes);
     }
 
-    public void Run(string registration)
+    public void Run(string registration, string? wtProfileGuid)
     {
-        DistroState.Run(registration, isRoot: false, _processCaller);
+        DistroState.Run(registration, wtProfileGuid, isRoot: false, processCaller: _processCaller);
     }
 
     public void Terminate(string registration)

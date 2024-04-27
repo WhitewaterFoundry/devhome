@@ -17,7 +17,7 @@ public interface IWslManager
     /// <returns> A list of virtual machines.</returns>
     public IEnumerable<WslRegisteredDistro> GetAllRegisteredDistros();
 
-    void Run(string registration);
+    void Run(string registration, string? wtProfileGuid);
 
     void Terminate(string registration);
 

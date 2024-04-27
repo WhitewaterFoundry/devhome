@@ -60,7 +60,7 @@ public class DistroDefinitionsManager
 
             r.Name = definition.Name;
             r.Logo = definition.Logo;
-
+            r.WtProfileGuid = definition.WtProfileGuid;
             return r;
         }).ToList();
     }

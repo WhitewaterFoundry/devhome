@@ -54,6 +54,7 @@ public class WslInstallAndRegisterDistroOperation : ICreateComputeSystemOperatio
                     IsDefault = d.DefaultDistro,
                     IsWsl2 = d.Version2,
                     Logo = d.Logo,
+                    WtProfileGuid = d.WtProfileGuid,
                 });
             }
 
